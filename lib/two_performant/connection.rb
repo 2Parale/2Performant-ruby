@@ -52,7 +52,7 @@ module TwoPerformant
     end
 
     def handle_response(response)
-      Nokogiri::XML.parse(response.body)
+      Nokogiri::XML.parse(response.body, nil, nil, Nokogiri::XML::ParseOptions::NOBLANKS | Nokogiri::XML::ParseOptions::DEFAULT_XML)
     end
 
     def http
