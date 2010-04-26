@@ -7,6 +7,10 @@ module TwoPerformant
         @resource_name ||= self.name.underscore.match(/(?:^|\/)([^\/]+)$/)[1]
       end
 
+      def initialize(node = nil)
+        @node = node
+      end
+
       def resource_name
         self.class.resource_name
       end
@@ -16,12 +20,14 @@ module TwoPerformant
 
         found_node = node.at(xmlized_method.to_s)
 
+        value = TwoPerformant::Caster.typecast_xml_node(found_node)
+
         if found_node
           (class << self; self; end).send(:define_method, method) do
-            found_node.children.first.text rescue nil
+            value rescue nil
           end
 
-          found_node.children.first.text rescue nil
+          value rescue nil
         else
           super
         end
