@@ -4,11 +4,21 @@ module TwoPerformant
       attr_accessor :node
 
       def self.resource_name
-        @resource_name ||= self.name.underscore.match(/(?:^|\/)([^\/]+)$/)[1]
+        # horrible pluralization, but it works for the classes that we're using
+        #
+        @resource_name ||= self.name.underscore.match(/(?:^|\/)([^\/]+)$/)[1] + 's'
+      end
+
+      def self.connection
+        @connection ||= TwoPerformant::Connection.new(TwoPerformant.site)
       end
 
       def initialize(node = nil)
         @node = node
+      end
+
+      def connection
+        self.class.connection
       end
 
       def resource_name
@@ -31,6 +41,24 @@ module TwoPerformant
         else
           super
         end
+      end
+
+      def id
+        return unless @node
+
+        found_node = node.at('id')
+        TwoPerformant::Caster.typecast_xml_node(found_node)
+      end
+
+      def get(id)
+        result = connection.get("#{path_for(id)}.xml")
+        if result.children[0].name == resource_name.chop
+          @node = result.children[0]
+        end
+      end
+
+      def path_for(id)
+        "#{(@parent_path)}/#{self.class.resource_name}/#{id}"
       end
     end
   end
