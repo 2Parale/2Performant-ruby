@@ -6,7 +6,7 @@ module TwoPerformant
   class Connection
     attr_accessor :site, :user, :password, :timeout
     
-    FORMATS = {
+    FORMAT = {
       :xml => 'text/xml'
     }
 
@@ -25,20 +25,20 @@ module TwoPerformant
       @timeout = options[:timeout] || 60
     end
 
-    def get(path, *arguments)
-      request('get', path, *arguments)
+    def get(path, headers = {})
+      request('get', path, build_request_headers(headers, :get))
     end
 
-    def post(path, *arguments)
-      request('post', path, *arguments)
+    def delete(path, headers = {})
+      request('delete', path, build_request_headers(headers, :delete))
     end
 
-    def put(path, *arguments)
-      request('put', path, *arguments)
+    def post(path, body = '', headers = {})
+      request('post', path, body, build_request_headers(headers, :post))
     end
 
-    def delete(path, *arguments)
-      request('delete', path, *arguments)
+    def put(path, body = '', headers = {})
+      request('put', path, body, build_request_headers(headers, :put))
     end
 
     def request(method, path, *arguments)
