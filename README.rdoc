@@ -1,6 +1,6 @@
 = 2performant
 
-Description goes here.
+Ruby interface for the 2Performant API.
 
 == Note on Patches/Pull Requests
  
@@ -14,4 +14,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 Andrei Bocan. See LICENSE for details.
+Copyright (c) 2010 2Performant. See LICENSE for details.

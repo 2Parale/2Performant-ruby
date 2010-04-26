@@ -7,9 +7,10 @@ begin
     gem.name = "2Performant"
     gem.summary = %Q{TODO: one-line summary of your gem}
     gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "zmaxor@gmail.com"
+    gem.email = "andrei@2performant.com"
     gem.homepage = "http://github.com/2performant/2Performant"
     gem.authors = ["Andrei Bocan"]
+    gem.add_dependency "nokogiri", ">= 0"
     gem.add_development_dependency "shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
