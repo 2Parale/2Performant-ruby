@@ -12,7 +12,6 @@ class TwoPerformant
     else 
       return false
     end
-    p self.class.default_options
 
     self.auth_type = auth_type
     self.host = host
