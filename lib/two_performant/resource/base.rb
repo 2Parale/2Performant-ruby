@@ -13,6 +13,17 @@ module TwoPerformant
         @connection ||= TwoPerformant::Connection.new(TwoPerformant.site)
       end
 
+      def self.path
+        "#{(@parent_path)}/#{self.resource_name}"
+      end
+
+      def self.all
+        result = connection.get("#{path}.xml")
+        if result.children[0].name == resource_name
+          TwoPerformant::Caster.typecast_xml_node(result.children[0])
+        end
+      end
+
       def initialize(node = nil)
         @node = node
       end
@@ -58,8 +69,9 @@ module TwoPerformant
       end
 
       def path_for(id)
-        "#{(@parent_path)}/#{self.class.resource_name}/#{id}"
+        "#{self.class.path}/#{id}"
       end
+
     end
   end
 end
