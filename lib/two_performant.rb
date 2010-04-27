@@ -1,4 +1,5 @@
 require 'httparty'
+require 'two_performant/oauth'
 
 class TwoPerformant
   include HTTParty
@@ -8,7 +9,7 @@ class TwoPerformant
     if auth_type == :simple 
       self.class.basic_auth auth_obj[:user], auth_obj[:pass]
     elsif auth_type == :oauth 
-      self.oauth = auth_obj
+      self.oauth = TwoPerformant::OAuth.new(auth_obj, host)
     else 
       return false
     end
@@ -114,7 +115,9 @@ class TwoPerformant
 
   #  Merchants: List affiliates approved in campaigns 
 	def affiliates_listformerchant(campaign_id=nil) 
-		request['campaign_id'] = campaign_id
+		request = {
+      'campaign_id' => campaign_id
+    }
     self.hook("/affiliates/listformerchant", "user", request, 'GET')
   end
        
@@ -557,7 +560,11 @@ class TwoPerformant
   # ===========================
 	
 	def hook(path, expected, send = nil, method = 'GET') 
-    result = self.class.send(method.downcase, "#{path}", :query => send)
+    if self.oauth
+      result = self.oauth.send(method.downcase, path, send)
+    else
+      result = self.class.send(method.downcase, path, :query => send)
+    end
 
     # scrap the container
     result.values.first
