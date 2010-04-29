@@ -14,4 +14,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 Andrei Bocan. See LICENSE for details.
+Copyright (c) 2010 2Performant. See LICENSE for details.

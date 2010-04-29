@@ -5,9 +5,9 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "2Performant"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "zmaxor@gmail.com"
+    gem.summary = %Q{Library for the 2Performant API}
+    gem.description = %Q{Library for the 2Performant API}
+    gem.email = "andrei@2performant.com"
     gem.homepage = "http://github.com/2performant/2Performant"
     gem.authors = ["2Performant"]
     gem.add_dependency "httparty"
