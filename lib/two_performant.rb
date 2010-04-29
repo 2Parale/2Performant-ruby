@@ -258,7 +258,12 @@ class TwoPerformant
 
   #  
   # Merchants: Create Text Link. 
-  # Txtlink must look like: array("title" => "title", "url" => "url", "help" => "help");  where "help" is optional
+  #
+  # Txtlink must be a hash of:
+  #   { "title" => "title",
+  #     "url" => "url",
+  #     "help" => "help"
+  #   },  where "help" is optional
   
   def txtlink_create(campaign_id, txtlink) 
     request = {
@@ -314,8 +319,12 @@ class TwoPerformant
 
   #  
   # Merchants: Create Text Ad. 
-  # Txtad must look like: array("title" => "title", "content" => "content", "url" => "url", "help" => "help");  where "help" is optional
-  
+  # Txtad must be a hash of:
+  #   { "title" => "title",
+  #     "content" => "content",
+  #     "url" => "url",
+  #     "help" => "help"
+  #   },  where "help" is optional
   def txtad_create(campaign_id, txtad) 
     request = {
       'txtad' => txtad
@@ -459,11 +468,18 @@ class TwoPerformant
 
   #  
   # Merchants: Create a WidgetStoreProduct. 
-  # WidgetStoreProduct must look like: 
-  # array("title" => "title", "description" => "desc", "caption" => "caption", "price" => "price(integer in RON)", 
-  # "promoted" => "promoted (0 or 1)", "category" => "category", "subcategory" => "subcategory",  "url" => "url", 
-  # "image_url" => "url to image location", "prid" => "product id")
-  
+  # WidgetStoreProduct must be a hash of: 
+  #   { "title" => "title",
+  #     "description" => "desc",
+  #     "caption" => "caption",
+  #     "price" => "price(integer in RON)", 
+  #     "promoted" => "promoted (0 or 1)",
+  #     "category" => "category",
+  #     "subcategory" => "subcategory", 
+  #     "url" => "url", 
+  #     "image_url" => "url to image location",
+  #     "prid" => "product id"
+  #   }
   def product_store_createitem(product_store_id, product) 
     request = {
       'product' => product
@@ -555,11 +571,7 @@ class TwoPerformant
   end
 
 
-  # ===========================
-  #  Actually process the data 
-  # ===========================
-	
-	def hook(path, expected, send = nil, method = 'GET') 
+	def hook(path, expected, send = nil, method = 'GET') #:nodoc:
     if self.oauth
       result = self.oauth.send(method.downcase, path, send)
     else
@@ -569,10 +581,4 @@ class TwoPerformant
     # scrap the container
     result.values.first
 	end
-	
-  def simpleHttpRequest(url, params, method) 
-  end
-
-  def oauthHttpRequest(url, params, method) 
-  end
 end
