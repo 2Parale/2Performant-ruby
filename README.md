@@ -1,17 +1,55 @@
-= 2performant
+# 2Performant Ruby API
 
-Description goes here.
+The API allows you to integrate any 2Performant network in your application.
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+Its goal is to make sure developers can implement anything that can be done via the web interface using API functions.
 
-== Copyright
+The API is RESTful XML over HTTP using all four verbs (GET/POST/PUT/DELETE).
 
-Copyright (c) 2010 2Performant. See LICENSE for details.
+The current implementation is a straight port of the PHP library, so the documentation applies, for the most part, to both libraries.
+
+API documentation can be found at:
+http://help.2performant.com/API
+
+
+## Some Examples
+
+Interacting with 2Performant networks is very easy.
+
+
+To initialize the object using simple authentication
+  
+    session = TwoPerformant.new(:simple, {
+      :user => 'user',
+      :pass => 'password',
+    }, 'http://api.yournetwork.com')
+
+To use oauth
+
+    tp = TwoPerformant.new(:oauth, {
+      :consumer_token => 'consumer_token',
+      :consumer_secret => 'consumer_secret',
+      :access_token => 'access_token',
+      :access_secret => 'access_secret'
+    }, 'http://api.yournetwork.com')
+
+
+Afterwards you can call any function from the TPerformant class:
+
+    # display the last 6 received messages
+    p session.received_messages_list
+
+For details about each API function the documentation can be found at:
+http://help.2performant.com/API
+
+
+## Advanced Applications
+
+You can build advanced applications using the 2Performant API and have them distributed over 2Performant App Store. 
+
+Get Started at: http://apps.2performant.com and http://help.2performant.com/Developers-Area
+
+## Reporting Problems
+
+If you encounters any problems don't hesitate to contact us at:
+support (at) 2performant.com
