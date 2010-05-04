@@ -3,6 +3,9 @@ require 'two_performant/oauth'
 
 class TwoPerformant
   include HTTParty
+  format :xml
+  headers 'Content-Type' => 'text/xml'
+
   attr_accessor :user, :pass, :host, :version, :auth_type, :oauth, :oauth_request
 	
 	def initialize(auth_type, auth_obj, host) 
@@ -14,6 +17,7 @@ class TwoPerformant
       return false
     end
 
+    self.version = "v1.0"
     self.auth_type = auth_type
     self.host = host
     self.class.base_uri host
@@ -572,13 +576,37 @@ class TwoPerformant
 
 
 	def hook(path, expected, send = nil, method = 'GET') #:nodoc:
+    params = normalize_params(send, method)
+    
     if self.oauth
-      result = self.oauth.send(method.downcase, path, send)
+      result = self.oauth.send(method.downcase, "/#{version}#{path}", send, params)
     else
-      result = self.class.send(method.downcase, path, :query => send)
+      result = self.class.send(method.downcase, "/#{version}#{path}", :body => params)
     end
 
     # scrap the container
-    result.values.first
+    if result.respond_to? :values
+      result.values.first 
+    else
+      result
+    end
 	end
+
+  def normalize_params(params, method)
+    hash_to_xml(:request => params).to_s
+  end
+
+  def hash_to_xml(var, document = nil)
+    document = REXML::Document.new if document.nil?
+
+    if var.respond_to? :keys
+      var.keys.each do |key|
+        hash_to_xml(var[key], document.add_element(key.to_s))
+      end
+    else
+      document.add_text(var.to_s)
+    end
+
+    document
+  end
 end
