@@ -559,6 +559,18 @@ class TwoPerformant
     self.hook("/ad_groups/#{ad_group_id}.xml", "ad_group", nil, "GET")
   end
 
+  # Affiliates: Add item to an Ad Group / Crate new Ad Group
+  def ad_group_createitem(group_id, tool_type, tool_id, new_group = nil)
+    request = {
+      'group_id' => group_id,
+      'new_group' => new_group,
+      'tool_type' => tool_type,
+      'tool_id' => tool_id
+    }
+
+    self.hook("/ad_groups/createitem.xml", "ad_group", request, 'POST')
+  end
+
   #  Affiliates: Destroy an Ad Group 
   def ad_group_destroy(ad_group_id) 
     self.hook("/ad_groups/#{ad_group_id}.xml", "ad_group", nil, "DELETE")
