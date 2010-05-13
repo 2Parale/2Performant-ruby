@@ -7,8 +7,8 @@ class TwoPerformant
   headers 'Content-Type' => 'text/xml'
 
   attr_accessor :user, :pass, :host, :version, :auth_type, :oauth, :oauth_request
-	
-	def initialize(auth_type, auth_obj, host) 
+  
+  def initialize(auth_type, auth_obj, host) 
     if auth_type == :simple 
       self.class.basic_auth auth_obj[:user], auth_obj[:pass]
     elsif auth_type == :oauth 
@@ -21,7 +21,7 @@ class TwoPerformant
     self.auth_type = auth_type
     self.host = host
     self.class.base_uri host
-	end
+  end
 
   # =======
   #  Users 
@@ -142,8 +142,8 @@ class TwoPerformant
   end
 
   #  Merchants: List affiliates approved in campaigns 
-	def affiliates_listformerchant(campaign_id=nil) 
-		request = {
+  def affiliates_listformerchant(campaign_id=nil) 
+    request = {
       'campaign_id' => campaign_id
     }
     self.hook("/affiliates/listformerchant", "user", request, 'GET')
@@ -190,7 +190,7 @@ class TwoPerformant
     self.hook("/commissions/listforaffiliate.xml", "commission", request, 'GET')
   end
 
-	#  Merchant Campaign Owner or Affiliate Commission Owner: Show information about a commission 
+  #  Merchant Campaign Owner or Affiliate Commission Owner: Show information about a commission 
   def commission_show(commission_id) 
     self.hook("/commissions/#{commission_id}.xml", "commission")
   end
@@ -576,7 +576,7 @@ class TwoPerformant
     self.hook("/ad_groups/#{ad_group_id}.xml", "ad_group", nil, "DELETE")
   end
 
-	#  Affiliates: Delete an Tool from a Group. tooltype is one of 'txtlink', 'txtad' or 'banner'. 
+  #  Affiliates: Delete an Tool from a Group. tooltype is one of 'txtlink', 'txtad' or 'banner'. 
   def ad_group_destroyitem(ad_group_id, tool_type, tool_id) 
     request = {
       'tool_type' => tool_type,
@@ -584,6 +584,39 @@ class TwoPerformant
     }
 
     self.hook("/ad_groups/#{ad_group_id}/destroyitem.xml", "ad_group", request, "DELETE")
+  end
+
+  #=================
+  # Affiliate Feeds 
+  #=================
+
+  # Affiliates: List Feeds 
+  def feeds_list() 
+    self.hook("/feeds.xml", "feed", nil, "GET")
+  end
+
+  # Affiliates: Create a Feed 
+  def feed_create(feed) 
+    request = {
+      'feed' => feed
+    }
+
+    self.hook("/feeds.xml", "feed", request, 'POST')
+  end
+
+  # Affiliates: Update a Feed 
+  def feed_update(feed_id, feed) 
+    request = {
+      'feed' => feed
+    }
+
+    self.hook("/feeds/#{feed_id}.xml", "feed", request, 'PUT')
+  end
+
+
+  # Affiliates: Destroy a Feed 
+  def feed_destroy(feed_id) 
+    self.hook("/feeds/#{feed_id}.xml", "feed", nil, "DELETE")
   end
 
   # ==========
@@ -621,7 +654,7 @@ class TwoPerformant
   end
 
 
-	def hook(path, expected, send = nil, method = 'GET') #:nodoc:
+  def hook(path, expected, send = nil, method = 'GET') #:nodoc:
     params = normalize_params(send, method)
     
     if self.oauth
@@ -636,7 +669,7 @@ class TwoPerformant
     else
       result
     end
-	end
+  end
 
   def normalize_params(params, method)
     hash_to_xml(:request => params).to_s
