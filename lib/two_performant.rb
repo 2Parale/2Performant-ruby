@@ -103,6 +103,30 @@ class TwoPerformant
   end
 
   # ============
+  #  Sales
+  # ============
+
+  def sale_create(campaign_id, sale)
+    request = {
+      'sale' => sale
+    }
+
+    self.hook("/campaigns/#{campaign_id}/sales.xml", "sale", request, "POST")
+  end
+
+  # ============
+  #  Leads
+  # ============
+
+  def lead_create(campaign_id, sale)
+    request = {
+      'lead' => lead
+    }
+
+    self.hook("/campaigns/#{campaign_id}/leads.xml", "lead", request, "POST")
+  end
+
+  # ============
   #  Affiliates 
   # ============
 
