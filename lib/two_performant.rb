@@ -432,10 +432,10 @@ class TwoPerformant
   end
 
   # ===============
-  #  Widget Stores
+  #  Product Stores
   # ===============
 
-  #  List Widget Stores from a Campaign
+  #  List Product Stores from a Campaign
   def product_stores_list(campaign_id)
     request = {
       'campaign_id' => campaign_id
@@ -444,12 +444,12 @@ class TwoPerformant
     self.hook("/product_stores.xml", "product-store", request)
   end
 
-  #  Show a WidgetStore
+  #  Show a Product Store
   def product_store_show(product_store_id)
     self.hook("/product_stores/#{product_store_id}.xml", "product-store")
   end
 
-  #  Show Products from a WidgetStore
+  #  Show Products from a Product Store
   def product_store_showitems(product_store_id, category=nil, page=1, perpage=6, uniq_products=nil)
     request = {
       'category'      => category,
@@ -462,7 +462,7 @@ class TwoPerformant
     self.hook("/product_stores/#{product_store_id}/showitems.xml", "product-store-data", request)
   end
 
-  #  Show a Product from a WidgetStore
+  #  Show a Product from a Product Store
   def product_store_showitem(product_store_id, product_id)
     request = {
       'product_id' => product_id
@@ -472,7 +472,7 @@ class TwoPerformant
   end
 
 
-  #  Search for Products in a WidgetStore
+  #  Search for Products in a Product Store
   def product_store_products_search(campaign_id, search, product_store_id='all', category=nil, page=1, perpage=6, sort='date', uniq_products=false)
     request = {
       'page'          => page,
@@ -490,7 +490,7 @@ class TwoPerformant
     self.hook("/product_stores/#{product_store_id}/searchpr.xml", "product-store-data", request, 'GET')
   end
 
-  #  Merchants: Update a WidgetStore
+  #  Merchants: Update a Product Store
   def product_store_update(product_store_id, product_store)
     request = {
       'product_store' => product_store
@@ -499,14 +499,14 @@ class TwoPerformant
     self.hook("/product_stores/#{product_store_id}.xml", "product-store", request, 'PUT')
   end
 
-  #  Merchants: Destroy a WidgetStore
+  #  Merchants: Destroy a Product Store
   def product_store_destroy(product_store_id)
     self.hook("/product_stores/#{product_store_id}.xml", "product-store", nil, 'DELETE')
   end
 
   #
-  # Merchants: Create a WidgetStoreProduct.
-  # WidgetStoreProduct must be a hash of:
+  # Merchants: Create a Product Store Product.
+  # Product Store Product must be a hash of:
   #   { "title" => "title",
   #     "description" => "desc",
   #     "caption" => "caption",
