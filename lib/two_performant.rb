@@ -408,10 +408,10 @@ class TwoPerformant
   end
 
   # Merchants: Create a banner
-  def banner_create(campaign_id, banner, banner_image_url)
+  def banner_create(campaign_id, banner, banner_picture)
     request = {
       'banner' => banner,
-      'banner_picture' => { :url => banner_image_url }
+      'banner_picture' => banner_picture
     }
 
     self.hook("/campaigns/#{campaign_id}/banners.xml", "banner", request, 'POST')
