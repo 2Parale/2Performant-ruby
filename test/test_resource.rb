@@ -4,18 +4,17 @@ class TestResource < Test::Unit::TestCase
 
   should "get the resource name from the current class" do
     @resource = TwoPerformant::Resource::Base.new
-    assert_equal 'base', @resource.resource_name
+    assert_equal 'bases', @resource.resource_name
   end
 
   should "get the resource name from the current class even if it is a child class" do
     class FooBarBaz < TwoPerformant::Resource::Base; end
     @resource = FooBarBaz.new
-    assert_equal 'foo_bar_baz', @resource.resource_name
+    assert_equal 'foo_bar_bazs', @resource.resource_name
   end
 
   context "with a resource" do
     setup do
-      @resource = TwoPerformant::Resource::Base.new
       node = Nokogiri::XML.parse(<<-XML)
       <campaign>
       <allow-apps type="boolean">true</allow-apps>
@@ -46,7 +45,7 @@ class TestResource < Test::Unit::TestCase
       <user-id type="integer">3</user-id>
       </campaign>
       XML
-      @resource.node = node.children.first
+      @resource = TwoPerformant::Resource::Base.new(node.children.first)
     end
 
     should "direct methods to the xml node when they are defined" do
@@ -64,10 +63,9 @@ class TestResource < Test::Unit::TestCase
       assert @resource.respond_to?(:name)
     end
 
-    # should "infer type from the type field" do
-      # p @resource.node.at('user-id').attributes["type"].value
-      # # assert_equal true, @resource.allow_apps
-    # end
+    should "infer type from the type field" do
+      assert_equal true, @resource.allow_apps
+    end
   end
 
 end

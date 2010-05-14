@@ -1,7 +1,7 @@
 module TwoPerformant
   module Resource
     class Base
-      attr_accessor :node
+      attr_reader :id
 
       def self.resource_name
         # horrible pluralization, but it works for the classes that we're using
@@ -54,22 +54,22 @@ module TwoPerformant
         end
       end
 
-      def id
-        return unless @node
+      def get(id, force = false)
+        @id = id
+        return unless force
 
-        found_node = node.at('id')
-        TwoPerformant::Caster.typecast_xml_node(found_node)
-      end
-
-      def get(id)
         result = connection.get("#{path_for(id)}.xml")
         if result.children[0].name == resource_name.chop
-          @node = result.children[0]
+          result.children[0]
         end
       end
 
       def path_for(id)
         "#{self.class.path}/#{id}"
+      end
+
+      def node
+        @node ||= get(id, true)
       end
 
     end
