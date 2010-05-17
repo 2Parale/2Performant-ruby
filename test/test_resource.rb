@@ -1,5 +1,38 @@
 require 'helper'
 
+$xml = Nokogiri::XML.parse(<<-XML)
+<campaign>
+<allow-apps type="boolean">true</allow-apps>
+<auto-affiliates type="boolean">false</auto-affiliates>
+<boolean type="boolean">false</boolean>
+<category-id type="integer">22</category-id>
+<cookie-life type="integer">186</cookie-life>
+<created-at type="datetime">2009-12-09T08:32:24-11:00</created-at>
+<default-lead-commission-rate type="decimal" nil="true"/>
+<default-lead-commission-type>fixed</default-lead-commission-type>
+<default-sale-commission-rate type="decimal">10.0</default-sale-commission-rate>
+<default-sale-commission-type>percent</default-sale-commission-type>
+<description>
+Tuatara is 100% dedicated to the Urban Style. Here you will always find the latest collections from the biggest brands in the world.
+
+The latest trends delivered with an eye to detail represents the Tuatara essence.
+</description>
+<id type="integer">1</id>
+<main-url>http://www.tuatara.ro</main-url>
+<name>Tuatara</name>
+<packets type="yaml">--- [] </packets>
+<payper-type>sale</payper-type>
+<process-period type="integer">10</process-period>
+<suspend type="boolean">false</suspend>
+<tos nil="true"/>
+<unique-code>296f9f580</unique-code>
+<updated-at type="datetime">2010-04-15T09:39:40-11:00</updated-at>
+<user-id type="integer">3</user-id>
+</campaign>
+XML
+$node = $xml.children.first
+
+
 class TestResource < Test::Unit::TestCase
 
   should "get the resource name from the current class" do
@@ -15,37 +48,7 @@ class TestResource < Test::Unit::TestCase
 
   context "with a resource" do
     setup do
-      node = Nokogiri::XML.parse(<<-XML)
-      <campaign>
-      <allow-apps type="boolean">true</allow-apps>
-      <auto-affiliates type="boolean">false</auto-affiliates>
-      <boolean type="boolean">false</boolean>
-      <category-id type="integer">22</category-id>
-      <cookie-life type="integer">186</cookie-life>
-      <created-at type="datetime">2009-12-09T08:32:24-11:00</created-at>
-      <default-lead-commission-rate type="decimal" nil="true"/>
-      <default-lead-commission-type>fixed</default-lead-commission-type>
-      <default-sale-commission-rate type="decimal">10.0</default-sale-commission-rate>
-      <default-sale-commission-type>percent</default-sale-commission-type>
-      <description>
-      Tuatara is 100% dedicated to the Urban Style. Here you will always find the latest collections from the biggest brands in the world.
-
-      The latest trends delivered with an eye to detail represents the Tuatara essence.
-      </description>
-      <id type="integer">1</id>
-      <main-url>http://www.tuatara.ro</main-url>
-      <name>Tuatara</name>
-      <packets type="yaml">--- [] </packets>
-      <payper-type>sale</payper-type>
-      <process-period type="integer">10</process-period>
-      <suspend type="boolean">false</suspend>
-      <tos nil="true"/>
-      <unique-code>296f9f580</unique-code>
-      <updated-at type="datetime">2010-04-15T09:39:40-11:00</updated-at>
-      <user-id type="integer">3</user-id>
-      </campaign>
-      XML
-      @resource = TwoPerformant::Resource::Base.new(node.children.first)
+      @resource = TwoPerformant::Resource::Base.new($node)
     end
 
     should "direct methods to the xml node when they are defined" do
@@ -65,6 +68,27 @@ class TestResource < Test::Unit::TestCase
 
     should "infer type from the type field" do
       assert_equal true, @resource.allow_apps
+    end
+  end
+
+  context "without a resource" do
+    should "not make a request when only using the id" do
+      TwoPerformant::Resource::Base.connection.expects(:get).never
+      TwoPerformant::Resource::Base.get(1)
+    end
+
+    should "raise an error when it receives xml of other entities" do
+      TwoPerformant::Resource::Base.connection.expects(:get).with('/bases/1.xml').returns($xml)
+
+      assert_raises(TwoPerformant::Exceptions::ResourceTypeMismatch) do
+        TwoPerformant::Resource::Base.get(1).name
+      end
+    end
+
+    should "make a request when using fields other than the id" do
+      TwoPerformant::Resource::Base.connection.expects(:get).with('/campaigns/1.xml').returns($xml)
+
+      assert_equal 'Tuatara', TwoPerformant::Resource::Campaign.get(1).name
     end
   end
 

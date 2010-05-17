@@ -1,7 +1,8 @@
 module TwoPerformant
   module Resource
     class Base
-      attr_reader :id
+      attr_accessor :id
+      attr_accessor :parent
 
       def self.resource_name
         # horrible pluralization, but it works for the classes that we're using
@@ -14,7 +15,7 @@ module TwoPerformant
       end
 
       def self.path
-        "#{(@parent_path)}/#{self.resource_name}"
+        "#{(@parent ? @parent.path : '')}/#{self.resource_name}"
       end
 
       def self.all
@@ -24,12 +25,18 @@ module TwoPerformant
         end
       end
 
+      def self.get(id)
+        resource = self.new
+        resource.id = id
+        resource
+      end
+
       def initialize(node = nil)
         @node = node
       end
 
       def connection
-        self.class.connection
+        Resource::Base.connection
       end
 
       def resource_name
@@ -56,11 +63,13 @@ module TwoPerformant
 
       def get(id, force = false)
         @id = id
-        return unless force
+        return self unless force
 
         result = connection.get("#{path_for(id)}.xml")
         if result.children[0].name == resource_name.chop
           result.children[0]
+        else
+          raise Exceptions::ResourceTypeMismatch.new(resource_name.chop, result.children[0].name)
         end
       end
 
