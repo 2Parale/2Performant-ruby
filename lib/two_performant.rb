@@ -660,7 +660,7 @@ class TwoPerformant
 
   # List Hooks 
   def hooks_list(oauth_token_key = 'current')
-    hook("/oauth_clients/{$oauth_token_key}/hooks.xml", "hook", nil, 'GET');
+    hook("/oauth_clients/{$oauth_token_key}/hooks.xml", "hook", nil, 'GET')
   end
 
 
@@ -670,12 +670,12 @@ class TwoPerformant
       'hook' => hook
     }
 
-    hook("/oauth_clients/#{oauth_token_key}/hooks.xml", "hook", request, 'POST');
+    hook("/oauth_clients/#{oauth_token_key}/hooks.xml", "hook", request, 'POST')
   end
 
   # Destroy a Hook 
   def hook_destroy(hook_id, oauth_token_key = 'current')
-    hook("/oauth_clients/#{oauth_token_key}/hooks/#{hook_id}.xml", "hook", nil, 'DELETE');
+    hook("/oauth_clients/#{oauth_token_key}/hooks/#{hook_id}.xml", "hook", nil, 'DELETE')
   end
 
   def hook(path, expected, send = nil, method = 'GET') #:nodoc:
