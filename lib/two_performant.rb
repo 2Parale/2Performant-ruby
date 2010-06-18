@@ -660,7 +660,7 @@ class TwoPerformant
 
   # List Hooks 
   def hooks_list(oauth_token_key = 'current')
-    hook("/oauth_clients/{$oauth_token_key}/hooks.xml", "hook", nil, 'GET')
+    hook("/oauth_clients/#{oauth_token_key}/hooks.xml", "hook", nil, 'GET')
   end
 
 
