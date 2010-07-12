@@ -138,7 +138,7 @@ class TwoPerformant
       'search'  => search
     }
 
-    self.hook("/affiliates/search", "user", request, 'GET')
+    self.hook("/affiliates/search.xml", "user", request, 'GET')
   end
 
   #  Merchants: List affiliates approved in campaigns
@@ -146,7 +146,7 @@ class TwoPerformant
     request = {
       'campaign_id' => campaign_id
     }
-    self.hook("/affiliates/listformerchant", "user", request, 'GET')
+    self.hook("/affiliates/listformerchant.xml", "user", request, 'GET')
   end
 
   # =============
