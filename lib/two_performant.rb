@@ -118,7 +118,7 @@ class TwoPerformant
   #  Leads
   # ============
 
-  def lead_create(campaign_id, sale)
+  def lead_create(campaign_id, lead)
     request = {
       'lead' => lead
     }
