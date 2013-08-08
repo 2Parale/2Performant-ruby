@@ -163,7 +163,7 @@ class TwoPerformant
       'perpage'     => perpage
     }
 
-    request.merge(options)
+    request = request.merge(options)
 
     self.hook("/commissions/search.xml", "commission", request, 'GET')
   end
