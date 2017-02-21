@@ -1,4 +1,15 @@
-# 2Performant Ruby API
+# Status
+
+This gem is no longer working and no longer maintained.
+
+Please see 
+
+* The API documentation: http://doc.2performant.com/
+* The PHP wrapper: https://github.com/2Parale/2Performant-php
+
+# Old readme
+
+## 2Performant Ruby API
 
 The API allows you to integrate any 2Performant network in your application.
 
